@@ -1,4 +1,4 @@
-credentials.yaml
+**/credentials.yaml
 *.log
 *.ipynb
 **/.ipynb_checkpoints/

@@ -20,8 +20,8 @@ class Database:
 
 	def createTableIfNotExists(self):
 		try:
-			c = self.conn.cursor()
-			c.execute(config['database']['query']['create'])
+			cur = self.conn.cursor()
+			cur.execute(config['database']['query']['create'])
 			self.conn.commit()
 		except Error as e:
 			self.logger.exception(e)
