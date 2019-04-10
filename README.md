@@ -24,8 +24,8 @@ The crawler will browse mentioned facebook groups (in config) and check if the p
 2. Code is written in hurry so it's not properly refactored. Refactor it whenever there's free time.
 3. Find better way of crawling recent post only. Research ways/APIs to find the same.
 
-
-    If you face any problem in using this program or find any error, feel free to create an issue. I will try my best to look into it in my free time.
-
+```
+If you face any problem in using this program or find any error, feel free to create an issue. I will try my best to look into it in my free time.
+```
 
 This project can crawl any facebook group in general and filter out post with specific keywords not containing exception words defined in config.
