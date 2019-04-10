@@ -1,0 +1,89 @@
+logs:
+  version: 1
+  formatters:
+    simple:
+      format: '%(asctime)s - [%(name)s] [%(levelname)s] - %(message)s'
+      datefmt: '%d%b%Y %H:%M:%S'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: simple
+      stream: ext://sys.stdout
+    file:
+      class: logging.FileHandler
+      level: DEBUG
+      formatter: simple
+      filename: logs/app.log
+      mode: a
+  loggers:
+    __main__:
+      level: DEBUG
+      handlers: [console, file]
+      propagate: no
+  root:
+    level: DEBUG
+    handlers: [file]
+
+webdriver:
+  chromeoptions: ["--start-maximized", "--disable-notifications"]
+  wait:
+    time: 10 #seconds
+  sleep: 2 #seconds
+
+database:
+  query:
+    create: CREATE TABLE IF NOT EXISTS posts (link varchar(256) PRIMARY KEY, posttime integer NOT NULL, keyword text, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP);
+    insert: INSERT INTO posts(link,posttime,keyword) VALUES(?,?,?)
+
+input:
+  url: https://www.facebook.com/groups/{}/?sorting_setting=RECENT_ACTIVITY
+  limit: 10   #no. of posts to crawl in a group
+  thread: 1   #max number of threads
+  groups: [
+    'flatsandflatmatesbanglore',
+    'FlatsandFlatmatesBangaloreChapter',
+    'cbuddy.roommates.bangalore',
+    '575327112671225',
+    '1112186535519650',
+    'BangaloreFlatmates',
+    '543987232323064',
+    '337835370175255',
+    '141404379916935',
+    '329320681157074'
+  ]
+  keywords: [
+    'bellandur',
+    'rmz',
+    'ecospace',
+    'eco space',
+    'kalyani',
+    'orr',
+    'outer ring road',
+    'kadubeesanahalli',
+    'cessna',
+    'yemalur',
+    'jp morgan',
+    'panathur',
+    'microsoft',
+    'agrahara',
+    'adarsh palm retreat',
+    'jcr layout',
+    'chandra layout'
+  ]
+  exceptions: [
+    'female only',
+    'females only',
+    'only female',
+    'only females',
+    'female flatmate',
+    'femaleflatmate',
+    'female flatmates',
+    'female roommate',
+    'female roommates',
+    'girls only',
+    'only girls',
+    'family only',
+    'only family',
+    'btm'
+  ]

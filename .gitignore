@@ -1,0 +1,7 @@
+credentials.yaml
+*.log
+*.ipynb
+**/.ipynb_checkpoints/
+**/__pycache__/
+logs/
+venv/
