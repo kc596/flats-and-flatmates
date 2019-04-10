@@ -1,7 +1,7 @@
 input:
   url: https://www.facebook.com/groups/{}/?sorting_setting=RECENT_ACTIVITY
-  limit: 10   #no. of posts to crawl in a group
-  thread: 1   #max number of threads
+  limit: 50   #no. of posts to crawl in a group
+  thread: 4   #max number of threads
   groups: [
     'flatsandflatmatesbanglore',
     'FlatsandFlatmatesBangaloreChapter',
