@@ -4,8 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from src.common.utils import loadConfiguration, loadCredentials
-import selenium
+from src.utils import loadConfiguration, loadCredentials
 import time
 
 config = loadConfiguration("config/config.yaml")
@@ -32,7 +31,7 @@ def getPostAtIndex(driver, index, logger):
 		ActionChains(driver).move_to_element(seeMoreLinkElement).perform()
 		seeMoreLinkElement.click()
 	except NoSuchElementException as e:
-		logger.debug("See more link not present")
+		logger.debug("See more link not present in post : "+str(index))
 	return postElement
 
 def getBodyOfPost(postElement, logger):
@@ -48,9 +47,7 @@ def getEpochOfPost(postElement, logger):
 		return int((timeElement).get_attribute("data-utime"))
 	except Exception as e:
 		logger.exception("Unable to get time stamp of post. Trying to get link of post for debugging.")
-		time.sleep(20)
 		logger.error("Link to post: "+getLinkToPost(postElement, logger))
-		time.sleep(20)
 		return 0
 
 def getLinkToPost(postElement, logger):
@@ -59,4 +56,4 @@ def getLinkToPost(postElement, logger):
 		if 'permalink' in str(link.get_attribute("href")):
 			return str(link.get_attribute("href"))
 	logger.exception("Link to post not found")
-	return "linknotfound"
+	return "linknotfound. This may be due to advertisement or member suggestions."

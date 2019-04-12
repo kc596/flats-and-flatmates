@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-from src.common.utils import *
+from src.utils import *
 
 config = loadConfiguration("config/config.yaml")
 

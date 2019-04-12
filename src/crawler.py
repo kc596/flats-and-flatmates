@@ -1,9 +1,8 @@
-from src.common.utils import loadConfiguration, getLogger
+from src.utils import loadConfiguration, getLogger
 from src import fbcrawlerutils as fbutil
-from src.common.Database import Database
-from src.common.WebDriver import WebDriver
+from src.database import Database
+from src.webdriver import WebDriver
 from threading import Thread
-import time
 
 config = loadConfiguration("config/config.yaml")
 
@@ -26,7 +25,7 @@ class Crawler(Thread):
 				self.driver.get(config['input']['url'].format(groupSlug))
 				index = 0
 				posts = []
-				logger.info("Scrolling posts")
+				logger.info("Scrolling posts of : "+str(groupSlug))
 				while index < config['input']['limit']:
 					try:
 						postElement = fbutil.getPostAtIndex(self.driver, index, logger)
@@ -35,13 +34,14 @@ class Crawler(Thread):
 						linkToPost = fbutil.getLinkToPost(postElement, logger)
 						if self.isPostSignificant(bodyOfPost):
 							keywordMatches = self.getKeywordMatches(bodyOfPost)
+							logger.debug("Inserting post number "+str(index)+" to database")
 							post = (linkToPost, timestamp, str(keywordMatches))
 							database.insertPost(post)
 					except Exception as e:
 						logger.error("Error in post number : "+str(index))
 						logger.exception(repr(e))
 					index += 1
-				logger.info("Completed crawling.")
+				logger.info("Completed crawling "+str(groupSlug))
 			except Exception as e:
 			   logger.exception(repr(e))
 			finally:
