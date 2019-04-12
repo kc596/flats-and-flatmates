@@ -43,7 +43,7 @@ class Crawler(Thread):
 					index += 1
 				logger.info("Completed crawling "+str(groupSlug))
 			except Exception as e:
-			   logger.exception(repr(e))
+				logger.exception(repr(e))
 			finally:
 				if databaseSession:
 					database.closeSession()
