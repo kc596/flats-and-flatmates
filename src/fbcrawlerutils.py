@@ -41,19 +41,19 @@ def getBodyOfPost(postElement, logger):
 		bodyOfThisPost += paragraph.text
 	return bodyOfThisPost
 
-def getEpochOfPost(postElement, logger):
+def getEpochOfPost(postElement, index, logger):
 	try:
 		timeElement = postElement.find_element_by_xpath(".//div[@data-testid='story-subtitle']//*[@data-utime]")
 		return int((timeElement).get_attribute("data-utime"))
 	except Exception as e:
-		logger.exception("Unable to get time stamp of post. Trying to get link of post for debugging.")
-		logger.error("Link to post: "+getLinkToPost(postElement, logger))
+		logger.exception("Unable to get time stamp of post number: {}. Trying to get link of post.".format(index))
+		logger.error("Link to post: "+getLinkToPost(postElement, index, logger))
 		return 0
 
-def getLinkToPost(postElement, logger):
+def getLinkToPost(postElement, index, logger):
 	links = postElement.find_elements_by_xpath(".//div[@data-testid='story-subtitle']//a")
 	for link in links:
 		if 'permalink' in str(link.get_attribute("href")):
 			return str(link.get_attribute("href"))
-	logger.exception("Link to post not found")
-	return "linknotfound. This may be due to advertisement or member suggestions."
+	logger.exception("Link to post number: {} not found".format(index))
+	return "linknotfound! This may be due to advertisement or member suggestions."

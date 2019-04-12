@@ -30,8 +30,8 @@ class Crawler(Thread):
 					try:
 						postElement = fbutil.getPostAtIndex(self.driver, index, logger)
 						bodyOfPost = fbutil.getBodyOfPost(postElement, logger)
-						timestamp = fbutil.getEpochOfPost(postElement, logger)
-						linkToPost = fbutil.getLinkToPost(postElement, logger)
+						timestamp = fbutil.getEpochOfPost(postElement, index, logger)
+						linkToPost = fbutil.getLinkToPost(postElement, index, logger)
 						if self.isPostSignificant(bodyOfPost):
 							keywordMatches = self.getKeywordMatches(bodyOfPost)
 							logger.debug("Inserting post number "+str(index)+" to database")
