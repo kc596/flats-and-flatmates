@@ -29,6 +29,7 @@ The crawler will browse mentioned facebook groups (in config) and check if the p
 1. Find better way of crawling recent post only. Research ways/APIs to find the same.
 2. Automatic chromedriver download.
 3. Regular expression instead of keyword match.
+4. Semantic analysis to get the summary of entire post in few lines?
 
 ```
 If you face any problem in using this program or find any error, feel free to create an issue. I will try my best to look into it in my free time.
