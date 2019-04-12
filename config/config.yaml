@@ -1,7 +1,19 @@
+database:
+  query:
+    create: CREATE TABLE IF NOT EXISTS posts (link varchar(256) PRIMARY KEY, posttime integer NOT NULL, keyword text, timestamp integer DEFAULT (strftime('%s', 'now')));
+    insert: INSERT INTO posts(link,posttime,keyword) VALUES(?,?,?)
+    select: SELECT * FROM posts
+
+webdriver:
+  chromeoptions: ["--start-maximized", "--disable-notifications"]
+  wait:
+    time: 10  #seconds
+  sleep: 2    #seconds
+
 input:
   url: https://www.facebook.com/groups/{}/?sorting_setting=RECENT_ACTIVITY
-  limit: 50   #no. of posts to crawl in a group
-  thread: 4   #max number of threads
+  limit: 50 #no. of posts to crawl in a group
+  thread: 3 #max number of threads
   groups: [
     'flatsandflatmatesbanglore',
     'FlatsandFlatmatesBangaloreChapter',
@@ -36,32 +48,24 @@ input:
   #case sensitivity is handled in code
   exceptions: [
     'female only',
+    'females only',
     'only female',
-    'femaleonly',
-    'femalesonly',
-    'onlyfemale',
     'female flatmate',
     'femaleflatmate',
     'female roommate',
     'girls only',
-    'hi girl',
-    'interested girl',
-    'only girl',
+    'hi girls',
+    'interested girls',
+    'only girls',
     'family only',
     'only family',
     'btm'
   ]
 
-database:
-  query:
-    create: CREATE TABLE IF NOT EXISTS posts (link varchar(256) PRIMARY KEY, posttime integer NOT NULL, keyword text, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP);
-    insert: INSERT INTO posts(link,posttime,keyword) VALUES(?,?,?)
-
-webdriver:
-  chromeoptions: ["--start-maximized", "--disable-notifications"]
-  wait:
-    time: 10 #seconds
-  sleep: 2 #seconds
+output:
+  directory: output/test/
+  query: SELECT * FROM posts ORDER BY posttime
+  timeformat: "%d-%m-%Y %I:%M%p"
 
 logs:
   version: 1

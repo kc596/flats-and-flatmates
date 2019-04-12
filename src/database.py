@@ -1,22 +1,31 @@
 import sqlite3
 from sqlite3 import Error
-from src.utils import *
+from src.utils import loadConfiguration, getLogger
 
 config = loadConfiguration("config/config.yaml")
 
 class Database:
 	def __init__(self, dbName):
+		self.database = "database/"+str(dbName)+".db"
 		self.logger = getLogger(str(dbName)+"-Database")
-		self.conn = self.createConnection("database/"+str(dbName)+".db")
+		self.conn = self.createConnection(self.database)
 		self.createTableIfNotExists()
 
 	def createConnection(self, db_file):
 		try:
 			conn = sqlite3.connect(db_file)
+			conn.row_factory = self.dict_factory
 			self.logger.info("Database connected : "+str(db_file))
+			return conn
 		except Error as e:
 			self.logger.exception(e)
-		return conn
+
+	# Used for getting dictionary from sqllite select query
+	def dict_factory(self, cursor, row):
+		d = {}
+		for idx, col in enumerate(cursor.description):
+			d[col[0]] = row[idx]
+		return d
 
 	def createTableIfNotExists(self):
 		try:
@@ -38,14 +47,15 @@ class Database:
 			return -1
 		return cur.lastrowid
 
-	def selectAll(self):
-		cur = self.conn.cursor()
-		cur.execute("SELECT * FROM posts")
-		rows = cur.fetchall()
-		data = []
-		for row in rows:
-			data.append(row)
-		return data
+	# Returns array of dictionary
+	def select(self, query=config['database']['query']['select']):
+		try:
+			cur = self.conn.cursor()
+			cur.execute(query)
+			return cur.fetchall()
+		except Error as e:
+			self.logger.exception(e)
+			return []
 
 	def closeSession(self):
 		self.conn.close()
