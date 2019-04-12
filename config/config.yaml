@@ -8,7 +8,7 @@ webdriver:
   chromeoptions: ["--start-maximized", "--disable-notifications"]
   wait:
     time: 10  #seconds
-  sleep: 2    #seconds
+  sleep: 3    #seconds
 
 input:
   url: https://www.facebook.com/groups/{}/?sorting_setting=RECENT_ACTIVITY
@@ -16,15 +16,7 @@ input:
   thread: 3 #max number of threads
   groups: [
     'flatsandflatmatesbanglore',
-    'FlatsandFlatmatesBangaloreChapter',
-    'cbuddy.roommates.bangalore',
-    '575327112671225',
-    '1112186535519650',
-    'BangaloreFlatmates',
-    '543987232323064',
-    '337835370175255',
-    '141404379916935',
-    '329320681157074'
+    'FlatsandFlatmatesBangaloreChapter'
   ]
   keywords: [
     'bellandur',
@@ -45,7 +37,9 @@ input:
     'jcr layout',
     'chandra layout'
   ]
+
   #case sensitivity is handled in code
+  #IMPORTANT: 'male only' will match 'female only' also because it contains the first string
   exceptions: [
     'female only',
     'females only',
@@ -63,8 +57,8 @@ input:
   ]
 
 output:
-  directory: output/test/
-  query: SELECT * FROM posts ORDER BY posttime
+  directory: output/
+  query: SELECT * FROM posts ORDER BY posttime DESC
   timeformat: "%d-%m-%Y %I:%M%p"
 
 logs:
@@ -81,15 +75,15 @@ logs:
       stream: ext://sys.stdout
     file:
       class: logging.FileHandler
-      level: DEBUG
+      level: INFO
       formatter: simple
       filename: logs/app.log
       mode: a
   loggers:
     __main__:
-      level: DEBUG
+      level: INFO
       handlers: [console, file]
       propagate: no
   root:
-    level: DEBUG
+    level: INFO
     handlers: [file]

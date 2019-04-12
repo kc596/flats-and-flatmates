@@ -18,11 +18,17 @@ The crawler will browse mentioned facebook groups (in config) and check if the p
 4. Place ***chromedriver*** in drivers folder according to your operation system. [From here](http://chromedriver.chromium.org/downloads)
 5. Run ***python main.py***
 
+### CAUTION
+1. ```'male only'``` keyword and exceptions in config will also match ```'female only'``` because the later contains the first.
+   You can use spaces to handle these situation i.e., ```' male only'```.
+2. Facebook might detect unusual activity from your account if you overuse the crawler. 
+   It might log you out and restrict certain features of your account (example: like, comments, etc.) for some time. 
+   I won't be responsible for any harm done due to this application.  
 
 ### TODO
-1. Create frontend using data in database to show the output.
-2. Code is written in hurry so it's not properly refactored. Refactor it whenever there's free time.
-3. Find better way of crawling recent post only. Research ways/APIs to find the same.
+1. Find better way of crawling recent post only. Research ways/APIs to find the same.
+2. Automatic chromedriver download.
+3. Regular expression instead of keyword match.
 
 ```
 If you face any problem in using this program or find any error, feel free to create an issue. I will try my best to look into it in my free time.
