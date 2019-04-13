@@ -8,12 +8,13 @@ webdriver:
   chromeoptions: ["--start-maximized", "--disable-notifications"]
   wait:
     time: 10  #seconds
-  sleep: 3    #seconds
+  sleep: 2    #seconds
+  maxtries: 5
 
 input:
   url: https://www.facebook.com/groups/{}/?sorting_setting=RECENT_ACTIVITY
   limit: 50 #no. of posts to crawl in a group
-  thread: 3 #max number of threads
+  thread: 2 #max number of threads
   groups: [
     'flatsandflatmatesbanglore',
     'FlatsandFlatmatesBangaloreChapter'
@@ -46,14 +47,16 @@ input:
     'only female',
     'female flatmate',
     'femaleflatmate',
-    'female roommate',
+    'female flat mate',
+    'female room',
     'girls only',
     'hi girls',
     'interested girls',
     'only girls',
     'family only',
     'only family',
-    'btm'
+    'btm',
+    'rmz infinity'
   ]
 
 output:
@@ -75,15 +78,15 @@ logs:
       stream: ext://sys.stdout
     file:
       class: logging.FileHandler
-      level: INFO
+      level: DEBUG
       formatter: simple
       filename: logs/app.log
       mode: a
   loggers:
     __main__:
-      level: INFO
+      level: DEBUG
       handlers: [console, file]
       propagate: no
   root:
-    level: INFO
+    level: DEBUG
     handlers: [file]

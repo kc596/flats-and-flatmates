@@ -21,17 +21,25 @@ def login(driver):
 	driver.find_element_by_xpath("//button[@type='submit']").click()
 
 def getPostAtIndex(driver, index, logger):
-	ActionChains(driver).send_keys(Keys.PAGE_DOWN).send_keys(Keys.PAGE_DOWN).perform()
-	time.sleep(config['webdriver']['sleep'])
 	posts = driver.find_elements_by_xpath("//div[@role='article'][contains(@id, 'post')]")
+	tries = config['webdriver']['maxtries']
+	while index >= len(posts) and tries > 0:
+		ActionChains(driver).send_keys(Keys.PAGE_DOWN).perform()
+		time.sleep(config['webdriver']['sleep'])
+		posts = driver.find_elements_by_xpath("//div[@role='article'][contains(@id, 'post')]")
+		tries -= 1
+		if tries <= 0:
+			logger.error("Unable to load post number: {}".format(index))
+			return None
+
+	time.sleep(config['webdriver']['sleep'])
 	postElement = posts[index]
 	ActionChains(driver).move_to_element(postElement).perform()
 	try:
 		seeMoreLinkElement = postElement.find_element_by_xpath(".//a[@class='see_more_link']")
-		ActionChains(driver).move_to_element(seeMoreLinkElement).perform()
 		seeMoreLinkElement.click()
 	except NoSuchElementException as e:
-		logger.debug("See more link not present in post : "+str(index))
+		logger.debug("See more link not present in post: " + str(index))
 	return postElement
 
 def getBodyOfPost(postElement, logger):
