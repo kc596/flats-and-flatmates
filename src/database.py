@@ -1,12 +1,14 @@
-import sqlite3
 from sqlite3 import Error
 from src.utils import loadConfiguration, getLogger
+import pathlib
+import sqlite3
 
 config = loadConfiguration("config/config.yaml")
 
 class Database:
 	def __init__(self, dbName):
 		self.database = "database/"+str(dbName)+".db"
+		pathlib.Path("database/").mkdir(parents=True, exist_ok=True)
 		self.logger = getLogger(str(dbName)+"-Database")
 		self.conn = self.createConnection(self.database)
 		self.createTableIfNotExists()
