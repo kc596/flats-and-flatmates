@@ -35,7 +35,7 @@ class Crawler(Thread):
 						if self.isPostSignificant(bodyOfPost):
 							keywordMatches = self.getKeywordMatches(bodyOfPost)
 							logger.debug("Inserting post number "+str(index)+" to database")
-							post = (linkToPost, timestamp, str(keywordMatches))
+							post = (linkToPost, timestamp, str(keywordMatches), bodyOfPost)
 							database.insertPost(post)
 					except Exception as e:
 						logger.error("Error in post number : "+str(index))

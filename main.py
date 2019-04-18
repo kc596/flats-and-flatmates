@@ -2,7 +2,6 @@ from queue import Queue
 from src.crawler import Crawler
 from src.outputgenerator import OutputGenerator
 from src.utils import loadConfiguration
-import sys
 
 config = loadConfiguration("config/config.yaml")
 jobQueue = Queue()

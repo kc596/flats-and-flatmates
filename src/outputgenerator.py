@@ -39,7 +39,7 @@ class OutputGenerator:
         '''.format(heading, self.getHtmlTableHeading(), self.getHtmlTableBody(data))
 
     def getHtmlTableHeading(self):
-        columns= ['S. No.', 'Post Time', 'Crawl Time', 'Keywords', 'URL']
+        columns= ['S. No.', 'Post Time', 'Crawl Time', 'Keywords', 'Body', 'URL']
         heading = "<thead style=\"font-weight:bold;\">";
         for column in columns:
             heading += "<td>{}</td>".format(column)
@@ -55,6 +55,7 @@ class OutputGenerator:
             body += "<td>{}</td>".format(datetime.fromtimestamp(row['posttime']).strftime(config['output']['timeformat']))
             body += "<td>{}</td>".format(datetime.fromtimestamp(int(row['timestamp'])).strftime(config['output']['timeformat']))
             body += "<td>{}</td>".format(row['keyword'])
+            body += "<td>{}...</td>".format(str(row['body'])[0:config['output']['sizeofbody']])
             body += "<td><a href=\"{}\" target=\"_blank\">Link</a></td>".format(row['link'])
             body += "</tr>"
             index += 1

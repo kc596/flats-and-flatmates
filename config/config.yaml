@@ -1,11 +1,11 @@
 database:
   query:
-    create: CREATE TABLE IF NOT EXISTS posts (link varchar(256) PRIMARY KEY, posttime integer NOT NULL, keyword text, timestamp integer DEFAULT (strftime('%s', 'now')));
-    insert: INSERT INTO posts(link,posttime,keyword) VALUES(?,?,?)
+    create: CREATE TABLE IF NOT EXISTS posts (link varchar(256) PRIMARY KEY, posttime integer NOT NULL, keyword text, body text, timestamp integer DEFAULT (strftime('%s', 'now')));
+    insert: INSERT INTO posts(link,posttime,keyword,body) VALUES(?,?,?,?)
     select: SELECT * FROM posts
 
 webdriver:
-  chromeoptions: ["--start-maximized", "--disable-notifications"]
+  chromeoptions: ["--headless", "--window-size=1367x768", "--start-maximized", "--disable-notifications"]
   wait:
     time: 10  #seconds
   sleep: 2    #seconds
@@ -14,7 +14,7 @@ webdriver:
 input:
   url: https://www.facebook.com/groups/{}/?sorting_setting=RECENT_ACTIVITY
   limit: 50 #no. of posts to crawl in a group
-  thread: 2 #max number of threads
+  thread: 3 #max number of threads
   groups: [
     'flatsandflatmatesbanglore',
     'FlatsandFlatmatesBangaloreChapter'
@@ -24,8 +24,7 @@ input:
     'rmz',
     'ecospace',
     'eco space',
-    'kalyani',
-    'orr',
+    ' orr ',
     'outer ring road',
     'kadubeesanahalli',
     'cessna',
@@ -42,13 +41,16 @@ input:
   #case sensitivity is handled in code
   #IMPORTANT: 'male only' will match 'female only' also because it contains the first string
   exceptions: [
+    'looking for a',
+    'single occupancy room',
+    'flatmate',
     'female only',
     'females only',
     'only female',
-    'female flatmate',
-    'femaleflatmate',
-    'female flat mate',
     'female room',
+    'for female',
+    'for females',
+    'for a female',
     'girls only',
     'hi girls',
     'interested girls',
@@ -63,6 +65,7 @@ output:
   directory: output/
   query: SELECT * FROM posts ORDER BY posttime DESC
   timeformat: "%d-%m-%Y %I:%M%p"
+  sizeofbody: 100 #characters
 
 logs:
   version: 1
