@@ -31,7 +31,7 @@ class OutputGenerator:
     def getHtmlSourceToWrite(self, heading, data):
         return '''
         <h3>{}</h3>
-        <table style="width: 95%; max-width:700px; border-collapse: collapse; align:center;" border = "2" cellpadding = "4">
+        <table style="width: 95%; max-width:768px; border-collapse: collapse; align:center;" border = "2" cellpadding = "4">
             {}
             {}
         </table>
@@ -55,7 +55,7 @@ class OutputGenerator:
             body += "<td>{}</td>".format(datetime.fromtimestamp(row['posttime']).strftime(config['output']['timeformat']))
             body += "<td>{}</td>".format(datetime.fromtimestamp(int(row['timestamp'])).strftime(config['output']['timeformat']))
             body += "<td>{}</td>".format(row['keyword'])
-            body += "<td>{}...</td>".format(str(row['body'])[0:config['output']['sizeofbody']])
+            body += "<td>{}...</td>".format(str(row['body'].decode("utf-8"))[0:config['output']['sizeofbody']])
             body += "<td><a href=\"{}\" target=\"_blank\">Link</a></td>".format(row['link'])
             body += "</tr>"
             index += 1
