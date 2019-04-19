@@ -13,45 +13,49 @@ class Crawler(Thread):
         self.queue = queue
         self.driver = WebDriver(config['webdriver']['chromeoptions']).getDriver()
         fbutil.login(self.driver)
-        self.idle = True
+        self.idle = False
 
     def run(self):
         while True:
             groupSlug = self.queue.get()
-            self.idle = False
-            databaseSession = False
-            logger = getLogger(groupSlug)
-            logger.info("Crawling started.")
-            try:
-                database = Database(groupSlug)
-                databaseSession = True
-                self.driver.get(config['input']['url'].format(groupSlug))
-                index = 0
-                posts = []
-                logger.info("Scrolling posts of : " + str(groupSlug))
-                while index < config['input']['limit']:
-                    try:
-                        postElement = fbutil.getPostAtIndex(self.driver, index, logger)
-                        bodyOfPost = fbutil.getBodyOfPost(postElement, logger)
-                        timestamp = fbutil.getEpochOfPost(postElement, index, logger)
-                        linkToPost = fbutil.getLinkToPost(postElement, index, logger)
-                        if self.isPostSignificant(bodyOfPost):
-                            keywordMatches = self.getKeywordMatches(bodyOfPost)
-                            logger.debug("Inserting post number " + str(index) + " to database")
-                            post = (linkToPost, timestamp, str(keywordMatches), bodyOfPost.encode("utf-8"))
-                            database.insertPost(post)
-                    except Exception as e:
-                        logger.error("Error in post number : " + str(index))
-                        logger.exception(repr(e))
-                    index += 1
-                logger.info("Completed crawling " + str(groupSlug))
-            except Exception as e:
-                logger.exception(repr(e))
-            finally:
-                if databaseSession:
-                    database.closeSession()
+            if groupSlug is "dummy":
                 self.idle = True
                 self.queue.task_done()
+            else:
+                self.idle = False
+                databaseSession = False
+                logger = getLogger(groupSlug)
+                logger.info("Crawling started.")
+                try:
+                    database = Database(groupSlug)
+                    databaseSession = True
+                    self.driver.get(config['input']['url'].format(groupSlug))
+                    index = 0
+                    posts = []
+                    logger.info("Scrolling posts of : " + str(groupSlug))
+                    while index < config['input']['limit']:
+                        try:
+                            postElement = fbutil.getPostAtIndex(self.driver, index, logger)
+                            bodyOfPost = fbutil.getBodyOfPost(postElement, logger)
+                            timestamp = fbutil.getEpochOfPost(postElement, index, logger)
+                            linkToPost = fbutil.getLinkToPost(postElement, index, logger)
+                            if self.isPostSignificant(bodyOfPost):
+                                keywordMatches = self.getKeywordMatches(bodyOfPost)
+                                logger.debug("Inserting post number " + str(index) + " to database")
+                                post = (linkToPost, timestamp, str(keywordMatches), bodyOfPost.encode("utf-8"))
+                                database.insertPost(post)
+                        except Exception as e:
+                            logger.error("Error in post number : " + str(index))
+                            logger.exception(repr(e))
+                        index += 1
+                    logger.info("Completed crawling " + str(groupSlug))
+                except Exception as e:
+                    logger.exception(repr(e))
+                finally:
+                    if databaseSession:
+                        database.closeSession()
+                    self.idle = True
+                    self.queue.task_done()
 
     @staticmethod
     def isPostSignificant(bodyOfPost):

@@ -19,14 +19,17 @@ while True:
     print("Starting crawling at {}".format(datetime.now()))
     for group in config['input']['groups']:
         jobQueue.put(group)
-    time.sleep(60)
+
+    if len(crawlers) > len(config['input']['groups']):
+        for i in range(len(crawlers)-len(config['input']['groups'])):
+            jobQueue.put("dummy")
 
     # wait for completion of all jobs in queue
     while True:
         terminate = True
         for crawler in crawlers:
             terminate = terminate and crawler.idle
-        time.sleep(5)
+        time.sleep(60)
         if terminate:
             break
 
