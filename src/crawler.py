@@ -13,10 +13,12 @@ class Crawler(Thread):
         self.queue = queue
         self.driver = WebDriver(config['webdriver']['chromeoptions']).getDriver()
         fbutil.login(self.driver)
+        self.idle = True
 
     def run(self):
         while True:
             groupSlug = self.queue.get()
+            self.idle = False
             databaseSession = False
             logger = getLogger(groupSlug)
             logger.info("Crawling started.")
@@ -48,6 +50,7 @@ class Crawler(Thread):
             finally:
                 if databaseSession:
                     database.closeSession()
+                self.idle = True
                 self.queue.task_done()
 
     @staticmethod

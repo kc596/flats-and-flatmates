@@ -3,28 +3,40 @@ from queue import Queue
 from src.crawler import Crawler
 from src.outputgenerator import OutputGenerator
 from src.utils import loadConfiguration
+import time
 
 config = loadConfiguration("config/config.yaml")
 jobQueue = Queue()
-
-startTime = int(datetime.now().timestamp())
+crawlers = []
 
 for i in range(config['input']['thread']):
     crawler = Crawler(jobQueue)
     crawler.start()
+    crawlers.append(crawler)
 
-for group in config['input']['groups']:
-    jobQueue.put(group)
+while True:
+    startTime = int(datetime.now().timestamp())
+    print("Starting crawling at {}".format(datetime.now()))
+    for group in config['input']['groups']:
+        jobQueue.put(group)
+    time.sleep(60)
 
-jobQueue.join()
-print("Job completed! Generating output.")
+    # wait for completion of all jobs in queue
+    while True:
+        terminate = True
+        for crawler in crawlers:
+            terminate = terminate and crawler.idle
+        time.sleep(5)
+        if terminate:
+            break
 
-outputFileName = config['output']['outputfileprefix']+"_"+datetime.now().strftime("%d_%m_%Y_%I_%M_%p")+".html"
-outputGenerator = OutputGenerator(outputFileName)
-outputGenerator.generateOuputFromDatabase()
-print("Complete output written to file: {}".format(outputFileName))
+    print("Job completed! Generating output.")
+    outputFileName = config['output']['outputfileprefix']+"_"+datetime.now().strftime("%d_%m_%Y_%I_%M_%p")+".html"
+    outputGenerator = OutputGenerator(outputFileName)
+    outputGenerator.generateOuputFromDatabase()
+    print("Complete output written to file: {}".format(outputFileName))
 
-newPostsFileName = config['output']['newpostsfileprefix']+"_"+datetime.now().strftime("%d_%m_%Y_%I_%M_%p")+".html"
-newPostsOutputGenerator = OutputGenerator(newPostsFileName)
-newPostsOutputGenerator.generateOuputFromDatabase(selectQuery="SELECT * FROM posts where timestamp>{}".format(startTime))
-print("New posts written to file: {}".format(newPostsFileName))
+    newPostsFileName = config['output']['newpostsfileprefix']+"_"+datetime.now().strftime("%d_%m_%Y_%I_%M_%p")+".html"
+    newPostsOutputGenerator = OutputGenerator(newPostsFileName)
+    newPostsOutputGenerator.generateOuputFromDatabase(selectQuery="SELECT * FROM posts where timestamp>{}".format(startTime))
+    print("New posts written to file: {}".format(newPostsFileName))
