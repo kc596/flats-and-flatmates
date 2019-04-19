@@ -16,7 +16,8 @@ class OutputGenerator:
             try:
                 database = Database(groupSlug)
                 data = database.select(selectQuery)
-                self.appendTableToOutputFile(groupSlug, data)
+                if len(data) > 0:
+                    self.appendTableToOutputFile(groupSlug, data)
                 database.closeSession()
             except Exception as e:
                 logger.exception("Problem in generating output from database for group: "+groupSlug)
