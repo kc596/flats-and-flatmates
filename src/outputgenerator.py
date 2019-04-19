@@ -24,14 +24,14 @@ class OutputGenerator:
         logger.info("Output written to file: "+self.filename)
 
     def appendTableToOutputFile(self, heading, data):
-        f = open(self.filename, "a+")
+        f = open(self.filename, "a+", encoding="utf-8")
         f.write(self.getHtmlSourceToWrite(heading, data))
         f.close()
 
     def getHtmlSourceToWrite(self, heading, data):
         return '''
         <h3>{}</h3>
-        <table style="width: 95%; max-width:768px; border-collapse: collapse; align:center;" border = "2" cellpadding = "4">
+        <table style="width: 95%; border-collapse: collapse; align:center;" border = "2" cellpadding = "4">
             {}
             {}
         </table>
