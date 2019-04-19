@@ -61,6 +61,8 @@ input:
 
 output:
   directory: output/
+  outputfileprefix: output
+  newpostsfileprefix: newposts
   query: SELECT * FROM posts ORDER BY posttime DESC
   timeformat: "%d-%m-%Y %I:%M%p"
   sizeofbody: 100 #characters

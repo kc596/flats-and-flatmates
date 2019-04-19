@@ -7,16 +7,15 @@ config = loadConfiguration("config/config.yaml")
 logger = getLogger("OutputGenerator")
 
 class OutputGenerator:
-    def __init__(self, outputfile="output_"+datetime.now().strftime("%d_%m_%Y_%I_%M_%p")+".html"):
+    def __init__(self, outputFile):
         pathlib.Path(config['output']['directory']).mkdir(parents=True, exist_ok=True)
-        self.filename = config['output']['directory']+outputfile
-        self.generateOuputFromDatabase()
+        self.filename = config['output']['directory']+outputFile
 
-    def generateOuputFromDatabase(self):
+    def generateOuputFromDatabase(self, selectQuery=config['output']['query']):
         for groupSlug in config['input']['groups']:
             try:
                 database = Database(groupSlug)
-                data = database.select(config['output']['query'])
+                data = database.select(selectQuery)
                 self.appendTableToOutputFile(groupSlug, data)
                 database.closeSession()
             except Exception as e:
