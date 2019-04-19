@@ -27,9 +27,10 @@ while True:
     # wait for completion of all jobs in queue
     while True:
         terminate = True
-        for crawler in crawlers:
-            terminate = terminate and crawler.idle
-        time.sleep(60)
+        for retry in range(5):
+            for crawler in crawlers:
+                terminate = terminate and crawler.idle
+            time.sleep(60)
         if terminate:
             break
 
