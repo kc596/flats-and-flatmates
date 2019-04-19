@@ -41,18 +41,16 @@ input:
   #case sensitivity is handled in code
   #IMPORTANT: 'male only' will match 'female only' also because it contains the first string
   exceptions: [
-    'looking for a',
-    'single occupancy room',
-    'flatmate',
+    'male flatmate', #female flatmates as well
+    'looking for a flatmate',
+    'single occupancy',
+    'double occupancy',
     'female only',
     'females only',
     'only female',
     'female room',
-    'for female',
-    'for females',
     'for a female',
     'girls only',
-    'hi girls',
     'interested girls',
     'only girls',
     'family only',
