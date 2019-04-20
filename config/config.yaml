@@ -7,17 +7,26 @@ database:
 webdriver:
   chromeoptions: ["--headless", "--window-size=1367x768", "--start-maximized", "--disable-notifications"]
   wait:
-    time: 10  #seconds
+    time: 30  #seconds
   sleep: 2    #seconds
-  maxtries: 5
+  maxtries: 7
 
 input:
   url: https://www.facebook.com/groups/{}/?sorting_setting=RECENT_ACTIVITY
-  limit: 50 #no. of posts to crawl in a group
-  thread: 3 #max number of threads
+  limit: 50  #no. of posts to crawl in a group
+  thread: 2  #max number of threads
   groups: [
     'flatsandflatmatesbanglore',
-    'FlatsandFlatmatesBangaloreChapter'
+    'FlatsandFlatmatesBangaloreChapter',
+    'cbuddy.roommates.bangalore',
+    '575327112671225',
+    '1112186535519650',
+    'BangaloreFlatmates',
+    '543987232323064',
+    '337835370175255',
+    '141404379916935',
+    '329320681157074',
+    '2020505841540002'
   ]
   keywords: [
     'bellandur',
@@ -42,8 +51,10 @@ input:
   #IMPORTANT: 'male only' will match 'female only' also because it contains the first string
   exceptions: [
     'male flatmate', #female flatmates as well
+    'roommate',
     'looking for a flatmate',
     'single occupancy',
+    'singleoccupancy',
     'double occupancy',
     'female only',
     'females only',
@@ -55,7 +66,6 @@ input:
     'only girls',
     'family only',
     'only family',
-    'btm',
     'rmz infinity'
   ]
 
@@ -70,6 +80,9 @@ output:
 logs:
   version: 1
   formatters:
+    html:
+      format: '%(asctime)s - [<font>%(name)s</font>] [<font>%(levelname)s</font>] - %(message)s'
+      datefmt: '%d%b%Y %H:%M:%S'
     simple:
       format: '%(asctime)s - [%(name)s] [%(levelname)s] - %(message)s'
       datefmt: '%d%b%Y %H:%M:%S'
@@ -82,8 +95,8 @@ logs:
     file:
       class: logging.FileHandler
       level: DEBUG
-      formatter: simple
-      filename: logs/app.log
+      formatter: html
+      filename: logs/app.html
       mode: a
   loggers:
     __main__:
