@@ -89,20 +89,20 @@ logs:
   handlers:
     console:
       class: logging.StreamHandler
-      level: DEBUG
+      level: INFO
       formatter: simple
       stream: ext://sys.stdout
     file:
       class: logging.FileHandler
-      level: DEBUG
+      level: INFO
       formatter: html
       filename: logs/app.html
       mode: a
   loggers:
     __main__:
-      level: DEBUG
+      level: INFO
       handlers: [console, file]
       propagate: no
   root:
-    level: DEBUG
+    level: INFO
     handlers: [file]

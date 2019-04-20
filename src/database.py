@@ -43,7 +43,7 @@ class Database:
 			cur = self.conn.cursor()
 			cur.execute(sql, post)
 			self.conn.commit()
-			self.logger.debug("Inserted post: "+str(post))
+			self.logger.info("Inserted post: "+str(post)[0:255]+"...")
 		except Error as e:
 			self.logger.error(e)
 			return -1
