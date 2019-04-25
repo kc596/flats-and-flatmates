@@ -10,6 +10,7 @@ import time
 config = loadConfiguration("config/config.yaml")
 credential = loadCredentials("config/credentials.yaml")
 
+
 def login(driver):
 	wait = WebDriverWait(driver, config['webdriver']['wait']['time'])
 	driver.get("https://www.facebook.com/login/")
@@ -19,6 +20,7 @@ def login(driver):
 	userNameInput.send_keys(credential['email'])
 	passwordInput.send_keys(credential['password'])
 	driver.find_element_by_xpath("//button[@type='submit']").click()
+
 
 def getPostAtIndex(driver, index, logger):
 	posts = driver.find_elements_by_xpath("//div[@role='article'][contains(@id, 'post')]")
@@ -31,7 +33,6 @@ def getPostAtIndex(driver, index, logger):
 		if tries <= 0:
 			logger.error("Unable to load post number: {}".format(index))
 			return None
-
 	time.sleep(config['webdriver']['sleep'])
 	postElement = posts[index]
 	ActionChains(driver).move_to_element(postElement).perform()
@@ -42,12 +43,14 @@ def getPostAtIndex(driver, index, logger):
 		logger.debug("See more link not present in post: " + str(index))
 	return postElement
 
-def getBodyOfPost(postElement, logger):
+
+def getBodyOfPost(postElement):
 	bodyOfThisPost = ""
 	paragraphsOfThisPost = postElement.find_elements_by_xpath(".//p")
 	for paragraph in paragraphsOfThisPost:
 		bodyOfThisPost += paragraph.text
 	return bodyOfThisPost
+
 
 def getEpochOfPost(postElement, index, logger):
 	try:
@@ -57,6 +60,7 @@ def getEpochOfPost(postElement, index, logger):
 		logger.warning("Unable to get time stamp of post number: {}. Trying to get link of post.".format(index))
 		logger.warning("Link to post: "+getLinkToPost(postElement, index, logger))
 		return 0
+
 
 def getLinkToPost(postElement, index, logger):
 	links = postElement.find_elements_by_xpath(".//div[@data-testid='story-subtitle']//a")
