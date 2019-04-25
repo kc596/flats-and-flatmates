@@ -4,10 +4,23 @@ from src.fbgroupcrawler import GroupCrawler
 from src.outputgenerator import OutputGenerator
 from src.utils import loadConfiguration, getLogger
 from src.webdriver import WebDriver
+from selenium.common.exceptions import TimeoutException
 
 config = loadConfiguration("config/config.yaml")
 logger = getLogger("main")
 
+
+def main():
+    global driver
+    fbutil.login(driver)
+    try:
+        crawlTillEndOfTime()
+    except TimeoutException as timeOutException:
+        logger.warn("Timeout exception. Relaunching...")
+        driver = WebDriver(config['webdriver']['chromeoptions']).getDriver()
+        main()
+    except Exception as e:
+        logger.exception(repr(e))
 
 def crawlTillEndOfTime():
     while True:
@@ -37,11 +50,7 @@ def writeOutput(startTime):
 
 if __name__=='__main__':
     driver = WebDriver(config['webdriver']['chromeoptions']).getDriver()
-    fbutil.login(driver)
-    try:
-        crawlTillEndOfTime()
-    except Exception as e:
-        logger.exception(repr(e))
+    main()
 
 '''
 def synchronized(func):
