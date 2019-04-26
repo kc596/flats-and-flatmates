@@ -17,6 +17,7 @@ def main():
         crawlTillEndOfTime()
     except TimeoutException as timeOutException:
         logger.warn("Timeout exception. Relaunching...")
+        driver.quit()
         driver = WebDriver(config['webdriver']['chromeoptions']).getDriver()
         main()
     except Exception as e:
