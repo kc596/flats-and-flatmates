@@ -27,7 +27,7 @@ The crawler will browse mentioned facebook groups (in config) and check if the p
 
 ### TODO
 1. Find better way of crawling recent post only. Research ways/APIs to find the same.
-2. Automatic chromedriver download.
+2. Multithreaded crawling and starting from same place after timeout exception than from beginning.
 3. Regular expression instead of keyword match.
 4. Semantic analysis to get the summary of entire post in few lines?
 
